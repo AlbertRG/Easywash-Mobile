@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">H2O Autolavado</string>
+
+    /*Login*/
+    <string name="Welcome">Bienvenido!</string>
+    <string name="Email">Correo Electronico</string>
+    <string name="Password">Contraseña</string>
+    <string name="ForgotPass">¿Olvidó su contraseña?</string>
+    <string name="Login">Iniciar Sesión</string>
+    <string name="Or">────────────────── o ─────────────────</string>
+    <string name="Sign">Registrarse</string>
+    <string name="Remember">Recordar contraseña</string>
+
+    /*SignUp*/
+    <string name="CreateAcc">Crear Cuenta</string>
+    <string name="Name">Nombre</string>
+    <string name="LastName">Apellido</string>
+    <string name="Phone">Telefono</string>
+    <string name="PhoneHelper">Telefono a 10 dígitos</string>
+    <string name="PasswordHelper">Mínimo 8 caracteres, una minúscula, una mayúscula y un número</string>
+    <string name="PasswordRepeat">Repetir Contraseña</string>
+    <string name="Services">Estoy de acuerdo con los <a href="https://www.google.com">términos y condiciones</a></string>
+
+    /*Recovery*/
+    <string name="Recovery">Recuperar Contraseña</string>
+    <string name="SendEmail">Enviar Correo de Recuperación</string>
+
+    /*Home*/
+    <string name="Noservice">No hay historial de servicios</string>
+    <string name="requestsevice">Solicitar Servicio</string>
+
+    /*Cars*/
+    <string name="Nocars">No hay ningun vehículo registrado</string>
+    <string name="signupcar">Registrar Vehículo</string>
+    <string name="plate">Placas</string>
+    <string name="brand">Marca</string>
+    <string name="model">Modelo</string>
+    <string name="year">Año</string>
+    <string name="color">Color</string>
+    <string name="signVehicle">Registrar Vehículo</string>
+    <string name="editVehicle">Editar</string>
+    <string name="deleteVehicle">Eliminar</string>
+
+    /*Settings*/
+    <string name="logout">Cerrar Sesión</string>
+
+</resources>
