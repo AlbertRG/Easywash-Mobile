@@ -4,16 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email, password;
     private Intent intent;
-
+    private DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
         email = findViewById(R.id.setEmailText);
         password = findViewById(R.id.setPasswordText);
-
+        databaseHelper = new DatabaseHelper(this);
         TextView forgot = findViewById(R.id.txtForgotPass);
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +44,24 @@ public class LoginActivity extends AppCompatActivity {
     }//onCreate
 
     public void Login(View view) {
+        Log.d("INICIOOOOOOOOOOOOOO","INICIOOOOOOOOOOOOOO");
+        if(email.getText().toString().equals("") || password.getText().toString().equals("")){
+            Toast.makeText(getApplicationContext(),"Llena todos los campos", Toast.LENGTH_SHORT).show();
+            Log.d("NO ENTROOOOOOO","nO ENTRO");
+        }
+        else {
+            Boolean checkCredentials = databaseHelper.checkEmailPassword(email.getText().toString(),password.getText().toString());
+
+            if(checkCredentials){
+                Toast.makeText(getApplicationContext(),"Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), MenuActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                Toast.makeText(getApplicationContext(),"Credenciales inválidas", Toast.LENGTH_SHORT).show();
+            }
+        }
         /*
         //Get list of internal files
         String[] fileList = fileList();
@@ -69,9 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         savePreferences(password);
                     }
                     */
-                    intent = new Intent(getApplicationContext(), MenuActivity.class);
-                    startActivity(intent);
-                    finish();
+
                     /*
                 } else {
                     Toast.makeText(getApplicationContext(), "Email or Password incorrect",Toast.LENGTH_LONG).show();
