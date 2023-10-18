@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email, password;
@@ -28,10 +32,25 @@ public class LoginActivity extends AppCompatActivity {
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(getApplicationContext(), RecoverPasswordActivity.class);
-                startActivity(intent);
-                finish();
+                String url = "jdbc:postgresql://54.152.214.237:5432/myproject";
+                String user = "myprojectuser";
+                String password = "password";
+                try {
+                    // Cargar el controlador JDBC de PostgreSQL
+
+                    // Establecer la conexión a la base de datos
+                    Connection connection = DriverManager.getConnection(url, user, password);
+
+                    // Ahora puedes utilizar 'connection' para realizar consultas a la base de datos
+
+                    // No olvides cerrar la conexión cuando hayas terminado
+                    connection.close();
+                } catch (SQLException e) {
+                    System.err.println("Error: No se pudo conectar a la base de datos.");
+                    e.printStackTrace();
+                }
             }
+
         });
 
         ImageView back = findViewById(R.id.imgBack);
@@ -110,6 +129,21 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }//SignUp
 
+    public void forgotPassword(View view){
+        String url = "jdbc:postgresql://54.152.214.237:5432/myproject";
+        String user = "myprojectuser";
+        String password = "password";
+        try{
+            Connection connection = DriverManager.getConnection(url,user,password);
+            Toast.makeText(getApplicationContext(),"Conexión realizada", Toast.LENGTH_SHORT).show();
+            connection.close();
+
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
     private void savePreferences (String name, String lastname, String email, String password){
         //Create object to store username and password information
         SharedPreferences metadata = getSharedPreferences("user.dat",MODE_PRIVATE);
