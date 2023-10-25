@@ -11,9 +11,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.easywash.rest.ApiInterface;
+import com.example.easywash.rest.RetrofitClient;
+import com.example.easywash.rest.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
+
+
+import okhttp3.MediaType;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,23 +46,47 @@ public class LoginActivity extends AppCompatActivity {
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "jdbc:postgresql://54.152.214.237:5432/myproject";
-                String user = "myprojectuser";
-                String password = "password";
-                try {
-                    // Cargar el controlador JDBC de PostgreSQL
+                RetrofitClient retrofit = new RetrofitClient();
+                ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
+                User user = new User("Alberto","Ruiz","0234","to@email.com","admin");
+                // Construye el cuerpo de la solicitud
+                MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+                Call<User> call = api.enviarDatos(user);
 
-                    // Establecer la conexión a la base de datos
-                    Connection connection = DriverManager.getConnection(url, user, password);
+                // Call<User[]> call = api.getRestaurantsList("json");
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        int statusCode = response.code();
+                        Log.d("STATUSCODE", "value is: "+ statusCode);
 
-                    // Ahora puedes utilizar 'connection' para realizar consultas a la base de datos
+                        if (response.isSuccessful()) {
+                            User users = response.body();
 
-                    // No olvides cerrar la conexión cuando hayas terminado
-                    connection.close();
-                } catch (SQLException e) {
-                    System.err.println("Error: No se pudo conectar a la base de datos.");
-                    e.printStackTrace();
-                }
+                                Log.d("lastname",user.getLast_name());
+                                Log.d("name",user.getEmail());
+                        } else {
+                            // Maneja errores
+                            String errorBody = response.errorBody().toString(); // Obtiene el cuerpo de la respuesta de error
+                            Log.d("Error Code", String.valueOf(statusCode));
+                            Log.d("Error Body", errorBody);
+                        }
+                        /*Log.d("success - response is  "+response.message(), response.message());
+                        User[] users = response.body();
+                        for(User user : users){
+                            Log.d("lastname",user.getLast_name());
+                            Log.d("name",user.getEmail());
+
+                        }*/
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Log.e("ERRORRR",t.getMessage());
+                    }
+
+                });
+
             }
 
         });
@@ -69,17 +107,79 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("NO ENTROOOOOOO","nO ENTRO");
         }
         else {
-            Boolean checkCredentials = databaseHelper.checkEmailPassword(email.getText().toString(),password.getText().toString());
+            //Conexion a la API
+            RetrofitClient retrofit = new RetrofitClient();
+            ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
+            User user = new User();
+            // Construye el cuerpo de la solicitud
+            Call<User[]> call = api.getClientsList("json");
+            //Llamada a APIREST
+            call.enqueue(new Callback<User[]>() {
+                @Override
+                public void onResponse(Call<User[]> call, Response<User[]> response) {
+                    if (response.isSuccessful()) {
+                        boolean login = false;
+                        User[] users = response.body();
+                        Log.d("email",email.getText().toString());
+                        Log.d("pass",password.getText().toString());
 
-            if(checkCredentials){
-                Toast.makeText(getApplicationContext(),"Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
-                intent = new Intent(getApplicationContext(), MenuActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            else {
-                Toast.makeText(getApplicationContext(),"Credenciales inválidas", Toast.LENGTH_SHORT).show();
-            }
+                        for(User user1 : users){
+                            Log.d("for",user1.getEmail());
+
+                            if(email.getText().toString().equals(user1.getEmail()) && password.getText().toString().equals(user1.getPassword())){
+                                login = true;
+                                user.setfirst_name(user1.getfirst_name());
+                                user.setLast_name(user1.getLast_name());
+                                user.setEmail(user1.getEmail());
+                                user.setPhone(user1.getPhone());
+                                Log.d("login email",user.getEmail());
+                                Log.d("login last",user.getLast_name());
+                                Log.d("login name user",user1.getLast_name());
+                                Log.d("login firt",user.getfirst_name());
+                                Log.d("login phone",user.getPhone());
+
+
+                                break;
+                            }
+
+                        }
+                        if(login) {
+                            Toast.makeText(getApplicationContext(), "Bienvenido "+user.getfirst_name(), Toast.LENGTH_LONG).show();
+                            intent = new Intent(getApplicationContext(), MenuActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Crendenciales Incorrectas", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        try {
+                            String errorBody = response.errorBody().string();
+                            JSONObject errorResponse = new JSONObject(errorBody);
+                            if (errorResponse.has("phone")) {
+                                String phoneError = errorResponse.getJSONArray("phone").getString(0);
+                                Toast.makeText(getApplicationContext(), "Teléfono ya registrado", Toast.LENGTH_LONG).show();
+
+
+                            }
+                            if (errorResponse.has("email")) {
+                                String emailError = errorResponse.getJSONArray("email").getString(0);
+                                Toast.makeText(getApplicationContext(), "Email ya registrado", Toast.LENGTH_LONG).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User[]> call, Throwable t) {
+                    Log.e("ERRORRR",t.getMessage());
+                }
+
+            });
         }
         /*
         //Get list of internal files

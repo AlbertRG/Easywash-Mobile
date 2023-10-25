@@ -12,11 +12,24 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.easywash.rest.ApiInterface;
+import com.example.easywash.rest.RetrofitClient;
+import com.example.easywash.rest.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.crypto.NoSuchPaddingException;
+
+import okhttp3.MediaType;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -63,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
     }//signUp
 
     private boolean createAccount() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        boolean res = false;
         if(password.getText().toString().trim().equals(repeatPassword.getText().toString().trim())){
             if(!esContrasenaValida(password.getText().toString())){
                 Toast.makeText(getApplicationContext(), "Contraseña no válida", Toast.LENGTH_LONG).show();
@@ -71,20 +85,50 @@ public class RegisterActivity extends AppCompatActivity {
                 if(!esNumeroDeTelefonoValido(phone.getText().toString())){
                     Toast.makeText(getApplicationContext(), "Telefono no válido", Toast.LENGTH_LONG).show();
                 }else{
-                    Boolean checkUserEmail = databaseHelper.checkEmail(email.getText().toString());
-                    if(!checkUserEmail){
-                        Boolean insert = databaseHelper.insertData(name.getText().toString(),lastname.getText().toString(),email.getText().toString().trim(),password.getText().toString().trim());
-                        if(insert){
-                            Toast.makeText(getApplicationContext(), "Cuenta registrada", Toast.LENGTH_LONG).show();
-                            return true;
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Error al registrar cuenta", Toast.LENGTH_LONG).show();
-                            return false;
+                    RetrofitClient retrofit = new RetrofitClient();
+                    ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
+                    User user = new User(name.getText().toString(),lastname.getText().toString(),phone.getText().toString(),email.getText().toString(),password.getText().toString());
+                    // Construye el cuerpo de la solicitud
+                    Call<User> call = api.enviarDatos(user);
+                    //Llamada a APIREST
+                    call.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Cuenta creada", Toast.LENGTH_LONG).show();
+                                intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                try {
+                                    String errorBody = response.errorBody().string();
+                                    JSONObject errorResponse = new JSONObject(errorBody);
+                                    if (errorResponse.has("phone")) {
+                                        String phoneError = errorResponse.getJSONArray("phone").getString(0);
+                                        Toast.makeText(getApplicationContext(), "Teléfono ya registrado", Toast.LENGTH_LONG).show();
+
+
+                                    }
+                                    if (errorResponse.has("email")) {
+                                        String emailError = errorResponse.getJSONArray("email").getString(0);
+                                        Toast.makeText(getApplicationContext(), "Email ya registrado", Toast.LENGTH_LONG).show();
+
+                                    }
+                                } catch (JSONException  e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Correo ya registrado", Toast.LENGTH_LONG).show();
-                        return false;
-                    }
+
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Log.e("ERRORRR",t.getMessage());
+                        }
+
+                    });
                 }
             }
         }else{
@@ -96,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         }
-        return false;
+        return res;
     }//createAccount
 
     public void login(View view) {
