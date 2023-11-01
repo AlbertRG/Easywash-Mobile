@@ -22,5 +22,9 @@ public interface ApiInterface {
     @GET("/easyrest/clients")
     Call<User[]> getClientsList(@Query("format") String format);
 
+    @GET("/easyrest/cars")
+    Call<User[]> getCarsList(@Query("format") String format);
+    @POST("/easyrest/cars/")
+    Call<User> sendCar(@Body Car car);
 
 }

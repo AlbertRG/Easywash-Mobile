@@ -2,7 +2,8 @@ package com.example.easywash.rest;
 import com.google.gson.annotations.SerializedName;
 
 public class User {
-    //private String id;
+    @SerializedName("id")
+    private String id;
     @SerializedName("first_name")
     private String first_name;
 
@@ -24,7 +25,7 @@ public class User {
     //private String created;
 
     public User(String first_name, String last_name, String phone, String email, String password) {
-
+        this.id = "0";
         this.first_name = first_name;
         this.last_name = last_name;
         this.phone = phone;
@@ -32,7 +33,7 @@ public class User {
         this.password = password;
     }
     public User() {
-
+        this.id = "0";
         this.first_name = "first_name";
         this.last_name = "last_name";
         this.phone = "phone";
@@ -86,6 +87,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

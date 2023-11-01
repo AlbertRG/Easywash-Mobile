@@ -1,6 +1,8 @@
 package com.example.easywash;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 
 import okhttp3.MediaType;
@@ -46,47 +49,24 @@ public class LoginActivity extends AppCompatActivity {
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RetrofitClient retrofit = new RetrofitClient();
-                ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
-                User user = new User("Alberto","Ruiz","0234","to@email.com","admin");
-                // Construye el cuerpo de la solicitud
-                MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-                Call<User> call = api.enviarDatos(user);
+                Connection connection = null;
+                try {
+                    // Configura la URL de conexión a tu base de datos PostgreSQL
+                    String url = "jdbc:postgresql://54.152.214.237:5432/myproject";
+                    String user = "myprojectuser";
+                    String password = "password";
 
-                // Call<User[]> call = api.getRestaurantsList("json");
-                call.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        int statusCode = response.code();
-                        Log.d("STATUSCODE", "value is: "+ statusCode);
+                    // Carga el controlador JDBC de PostgreSQL
+                    Class.forName("org.postgresql.Driver");
 
-                        if (response.isSuccessful()) {
-                            User users = response.body();
-
-                                Log.d("lastname",user.getLast_name());
-                                Log.d("name",user.getEmail());
-                        } else {
-                            // Maneja errores
-                            String errorBody = response.errorBody().toString(); // Obtiene el cuerpo de la respuesta de error
-                            Log.d("Error Code", String.valueOf(statusCode));
-                            Log.d("Error Body", errorBody);
-                        }
-                        /*Log.d("success - response is  "+response.message(), response.message());
-                        User[] users = response.body();
-                        for(User user : users){
-                            Log.d("lastname",user.getLast_name());
-                            Log.d("name",user.getEmail());
-
-                        }*/
-                    }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Log.e("ERRORRR",t.getMessage());
-                    }
-
-                });
-
+                    // Conecta a la base de datos
+                    connection = DriverManager.getConnection(url, user, password);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                Log.d("Soy gabo","hola");
             }
 
         });
@@ -125,19 +105,34 @@ public class LoginActivity extends AppCompatActivity {
 
                         for(User user1 : users){
                             Log.d("for",user1.getEmail());
-
+                            Log.d("id",user1.getId());
                             if(email.getText().toString().equals(user1.getEmail()) && password.getText().toString().equals(user1.getPassword())){
                                 login = true;
+                                user.setId(user1.getId());
                                 user.setfirst_name(user1.getfirst_name());
                                 user.setLast_name(user1.getLast_name());
                                 user.setEmail(user1.getEmail());
                                 user.setPhone(user1.getPhone());
+                                Log.d("id",user1.getId());
                                 Log.d("login email",user.getEmail());
                                 Log.d("login last",user.getLast_name());
                                 Log.d("login name user",user1.getLast_name());
                                 Log.d("login firt",user.getfirst_name());
                                 Log.d("login phone",user.getPhone());
+                                SharedPreferences sharedPreferences = getSharedPreferences("User", Context.MODE_PRIVATE);
+                                String idUser = user.getId();
+                                String firstName = user.getfirst_name();
+                                String lastName = user.getLast_name();
+                                String phone = user.getPhone();
+                                String email = user.getEmail();
 
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("id",idUser);
+                                editor.putString("name",firstName);
+                                editor.putString("lastname",lastName);
+                                editor.putString("phone",phone);
+                                editor.putString("email",email);
+                                editor.commit();
 
                                 break;
                             }
@@ -181,46 +176,6 @@ public class LoginActivity extends AppCompatActivity {
 
             });
         }
-        /*
-        //Get list of internal files
-        String[] fileList = fileList();
-        String accountFile = email.getText().toString().trim() + ".txt";
-        //Validate file
-        if(checkFiles(fileList, accountFile)){
-            try{
-                //Associate file to instance
-                InputStreamReader internalFile = new InputStreamReader(openFileInput(accountFile));
-                //Instance to read file
-                BufferedReader FileReader = new BufferedReader(internalFile);
-                //Read the content of the file and put it in a variable
-                String line = FileReader.readLine();
-                String email = line;
-                line = FileReader.readLine();
-                String password = line;
-                line = FileReader.readLine();
-                String username = line;
-                //Compare file info vs components info
-                if(email.equals(this.email.getText().toString().trim()) && password.equals(this.password.getText().toString().trim())){
-                    //Toast.makeText(getApplicationContext(), "Login",Toast.LENGTH_SHORT).show();
-                    savePreferencesNeeded(email, username);
-                    //Save preferences if user selects it
-                    if(remember.isChecked()){
-                        savePreferences(password);
-                    }
-                    */
-
-                    /*
-                } else {
-                    Toast.makeText(getApplicationContext(), "Email or Password incorrect",Toast.LENGTH_LONG).show();
-                }
-                FileReader.close();
-                internalFile.close();
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "ERROR login",Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "ERROR the account does not exist",Toast.LENGTH_LONG).show();
-        }*/
     }//Login
 
     public void SignUp(View view) {
