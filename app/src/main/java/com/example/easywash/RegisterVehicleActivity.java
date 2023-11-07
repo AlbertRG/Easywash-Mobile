@@ -1,11 +1,13 @@
 package com.example.easywash;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.easywash.rest.ApiInterface;
 import com.example.easywash.rest.Car;
+import com.example.easywash.rest.CarParcelable;
 import com.example.easywash.rest.RetrofitClient;
 import com.example.easywash.rest.User;
 
@@ -34,6 +37,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
     ImageView back;
     Button btnSend;
     EditText plate, model, brand, color, year;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,15 +73,18 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                         ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
                         //Instancia de carro
                         Car car = new Car(getUserId(),plate.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
-
+                        CarParcelable carParcelable = new CarParcelable(getUserId(),plate.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
                         // Construye el cuerpo de la solicitud
-                        Call<User> call = api.sendCar(car);
+                        Call<Car> call = api.sendCar(car);
                         //Llamada a APIREST
-                        call.enqueue(new Callback<User>() {
+                        call.enqueue(new Callback<Car>() {
                             @Override
-                            public void onResponse(Call<User> call, Response<User> response) {
+                            public void onResponse(Call<Car> call, Response<Car> response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Auto registrado", Toast.LENGTH_LONG).show();
+                                    Intent resultIntent = new Intent();
+                                    resultIntent.putExtra("newCar", (Parcelable) carParcelable);
+                                    setResult(RESULT_OK, resultIntent);
                                     finish();
                                 } else {
                                     try {
@@ -98,7 +105,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                                 }
                             }
                             @Override
-                            public void onFailure(Call<User> call, Throwable t) {
+                            public void onFailure(Call<Car> call, Throwable t) {
                                 Log.e("ERRORRR",t.getMessage());
                             }
 
@@ -131,4 +138,5 @@ public class RegisterVehicleActivity extends AppCompatActivity {
         String idUser = sharedPreferences.getString("id", "0");
         return idUser;
     }
+
 }

@@ -3,11 +3,15 @@ package com.example.easywash.rest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -23,8 +27,15 @@ public interface ApiInterface {
     Call<User[]> getClientsList(@Query("format") String format);
 
     @GET("/easyrest/cars")
-    Call<User[]> getCarsList(@Query("format") String format);
+    Call<Car[]> getCarsList(@Query("format") String format);
     @POST("/easyrest/cars/")
-    Call<User> sendCar(@Body Car car);
+    Call<Car> sendCar(@Body Car car);
+    @GET("/easyrest/cars/{id}")
+    Call<Car> getCarById(@Path("id") String carId);
+    @PATCH("/easyrest/cars/{id}/")
+    Call<Car> updateCar(@Path("id") String carId, @Body Car updatedCar);
+    @DELETE("/easyrest/cars/{id}/")
+    Call<Void> deleteCar(@Path("id") String carId);
+
 
 }
