@@ -19,21 +19,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.easywash.Adapters.CarListAdapter;
 import com.example.easywash.rest.ApiInterface;
 import com.example.easywash.rest.Car;
-import com.example.easywash.rest.CarParcelable;
 import com.example.easywash.rest.RetrofitClient;
-import com.example.easywash.rest.User;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -95,7 +86,7 @@ public class CarsFragment extends Fragment {
             }
         });
 
-        buttontestedit = vista.findViewById(R.id.carsitem1);
+        buttontestedit = vista.findViewById(R.id.carsitemMyAccount);
         buttontestedit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,7 +133,7 @@ public class CarsFragment extends Fragment {
 
                 }
                 Log.d("onViewCreated carArrayList size", String.valueOf(carArrayList.size()));
-                CarListAdapter carListAdapter = new CarListAdapter(carArrayList,getActivity());
+                CarListAdapter carListAdapter = new CarListAdapter(carArrayList,getActivity(),registerVehicleLauncher);
                 carList.setAdapter(carListAdapter);
                 carListAdapter.notifyDataSetChanged();
             }//onResponse
@@ -160,10 +151,7 @@ public class CarsFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         if (result.getData() != null) {
-                            CarParcelable newCarParcelable = result.getData().getParcelableExtra("newCar");
-                            if (newCarParcelable != null) {
-                                getItemscar();
-                            }
+                            getItemscar();
                         }
                     }
                 }
@@ -177,6 +165,8 @@ public class CarsFragment extends Fragment {
     }
 
     private void getItemscar(){
+        int id = getId();
+        Log.d("fragment ID", String.valueOf(id));
         carList = vista.findViewById(R.id.recyclerCar);
         carList.setLayoutManager(new LinearLayoutManager(getActivity()));
         carList.setHasFixedSize(true);
@@ -208,7 +198,7 @@ public class CarsFragment extends Fragment {
 
                 }
                 Log.d("onViewCreated carArrayList size", String.valueOf(carArrayList.size()));
-                CarListAdapter carListAdapter = new CarListAdapter(carArrayList,getActivity());
+                CarListAdapter carListAdapter = new CarListAdapter(carArrayList,getActivity(),registerVehicleLauncher);
                 carList.setAdapter(carListAdapter);
                 carListAdapter.notifyDataSetChanged();
             }//onResponse
@@ -221,5 +211,20 @@ public class CarsFragment extends Fragment {
         });
         //API
     }//getItemscar
+    public void updateCarList() {
+        carArrayList.clear();
+        getItemscar();
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ( resultCode == Activity.RESULT_OK) {
+            boolean adapterUpdated = data.getBooleanExtra("adapterUpdated", false);
+            if (adapterUpdated) {
+                // Actualiza el adaptador
+                updateCarList();
+            }
+        }
+    }
 }

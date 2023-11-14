@@ -125,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                                 String lastName = user.getLast_name();
                                 String phone = user.getPhone();
                                 String email = user.getEmail();
+                                String pass = user1.getPassword();
 
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("id",idUser);
@@ -132,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString("lastname",lastName);
                                 editor.putString("phone",phone);
                                 editor.putString("email",email);
+                                editor.putString("pass",pass);
                                 editor.commit();
 
                                 break;

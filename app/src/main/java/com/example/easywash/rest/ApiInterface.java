@@ -15,10 +15,8 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
-    @Headers("Content-Type: application/json")
-    @FormUrlEncoded
-    @POST("/easyrest/clients")
-    Call<User[]> getUserInformation(@Field("name") String name, @Field("last_name") String lastname, @Field("phone") String phone, @Field("email") String email, @Field("password") String password);
+    @GET("/easyrest/clients/{id}")
+    Call<User> getUsertById(@Path("id") String userId);
 
     @Headers("Content-Type: application/json")
     @POST("/easyrest/clients/")
@@ -36,6 +34,14 @@ public interface ApiInterface {
     Call<Car> updateCar(@Path("id") String carId, @Body Car updatedCar);
     @DELETE("/easyrest/cars/{id}/")
     Call<Void> deleteCar(@Path("id") String carId);
+    @PATCH("/easyrest/clients/{id}/")
+    Call<User> updateUser(@Path("id") String userId, @Body User updatedUser);
+    @DELETE("/easyrest/clients/{id}/")
+    Call<Void> deleteUser(@Path("id") String userid);
+    @GET("/easyrest/service_tickets")
+    Call<Service[]> getServiceList(@Query("format") String format);
+    @GET("/easyrest/service_tickets/{id}")
+    Call<Service> getTicketById(@Path("id") String ticketId);
 
 
 }

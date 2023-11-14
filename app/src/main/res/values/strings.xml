@@ -43,5 +43,11 @@
 
     /*Settings*/
     <string name="logout">Cerrar Sesión</string>
+    /*My account*/
+    <string name="MyAccount">Mi cuenta</string>
+    <string name="editAccount">Actualizar datos</string>
+    <string name="deleteAccount">Eliminar cuenta</string>
+    <string name="newPassword">Nueva Contraseña</string>
+    <string name="newPasswordRepeat">Repetir Nueva Contraseña</string>
 
 </resources>

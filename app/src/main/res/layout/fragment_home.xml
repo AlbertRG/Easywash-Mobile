@@ -57,18 +57,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imagelogohome">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/homeitem1"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerService"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/buttonwhite"
-                android:text="092223172934"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/homeitem2"

@@ -35,7 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="092223172934"
             android:textAlignment="center"
             android:textSize="36sp"
             android:textStyle="bold" />
@@ -50,9 +49,8 @@
                 android:id="@+id/txtDateTicket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="22 de Septiembre 2023"
-                android:textAlignment="center"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="italic" />
 
@@ -60,9 +58,8 @@
                 android:id="@+id/txtTimeTicket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="17:39 hrs"
-                android:textAlignment="center"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="italic" />
         </LinearLayout>
@@ -72,7 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="Luis Alberto Rivero Garrido"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="italic" />
@@ -82,7 +78,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="JTC8735"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="italic" />
@@ -97,9 +92,8 @@
                 android:id="@+id/txtBrandTicket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mitsubishi"
-                android:textAlignment="center"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="italic" />
 
@@ -107,9 +101,8 @@
                 android:id="@+id/txtModelTicket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Outlander"
-                android:textAlignment="center"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="italic" />
         </LinearLayout>
@@ -124,9 +117,8 @@
                 android:id="@+id/txtYearTicket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2014"
-                android:textAlignment="center"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="italic" />
 
@@ -134,9 +126,8 @@
                 android:id="@+id/txtColorVehicleTicket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Plata"
-                android:textAlignment="center"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="italic" />
         </LinearLayout>
@@ -151,9 +142,8 @@
                 android:id="@+id/txtServiceTicket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lavado"
-                android:textAlignment="center"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="italic" />
 
@@ -161,9 +151,8 @@
                 android:id="@+id/txtPaymentTicket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Efectivo"
-                android:textAlignment="center"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="italic" />
         </LinearLayout>
@@ -173,10 +162,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="$110"
             android:textAlignment="center"
             android:textSize="36sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageView4"

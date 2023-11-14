@@ -72,7 +72,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                         //Instancia de api
                         ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
                         //Instancia de carro
-                        Car car = new Car(getUserId(),plate.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
+                        Car car = new Car(getUserId(),plate.getText().toString(),brand.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
                         CarParcelable carParcelable = new CarParcelable(getUserId(),plate.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
                         // Construye el cuerpo de la solicitud
                         Call<Car> call = api.sendCar(car);

@@ -22,10 +22,13 @@ import java.util.ArrayList;
 public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarViewHolder> {
     private Context context;
     private ArrayList<Car> carArrayList;
+    private ActivityResultLauncher<Intent> editVehicleLauncher;
 
-    public CarListAdapter(ArrayList<Car> carArrayList, Context context){
+
+    public CarListAdapter(ArrayList<Car> carArrayList, Context context,  ActivityResultLauncher<Intent> launcher){
         this.carArrayList = carArrayList;
         this.context = context;
+        this.editVehicleLauncher = launcher;
         Log.d("CarListAdapter constructor", String.valueOf(carArrayList.size()));
         for(Car car1 : carArrayList){
                 Log.d("plate constructor", car1.getOwner());
@@ -52,6 +55,7 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarViewH
 
     }
 
+
     @Override
     public int getItemCount() {
         return carArrayList.size();
@@ -65,10 +69,14 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarViewH
             btnPlate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, EditVehicleActivity.class);
+                    //Context context = view.getContext();
+                    //Intent intent = new Intent(context, EditVehicleActivity.class);
+                    //intent.putExtra("ID", carArrayList.get(getAbsoluteAdapterPosition()).getId());
+                    //context.startActivity(intent);
+
+                    Intent intent = new Intent( context, EditVehicleActivity.class);
                     intent.putExtra("ID", carArrayList.get(getAbsoluteAdapterPosition()).getId());
-                    context.startActivity(intent);
+                    editVehicleLauncher.launch(intent);
 
                 }
             });
@@ -76,5 +84,6 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.CarViewH
             Log.d("CarViewHolder Plate","hola");
 
         }
+
     }
 }

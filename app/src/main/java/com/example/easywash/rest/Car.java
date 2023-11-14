@@ -9,6 +9,8 @@ public class Car {
     String owner;
     @SerializedName("plate")
     String plate;
+    @SerializedName("brand")
+    String brand;
     @SerializedName("model")
     String model;
     @SerializedName("year")
@@ -16,9 +18,10 @@ public class Car {
     @SerializedName("color")
     String color;
 
-    public Car(String owner, String plate, String model, String year, String color) {
+    public Car(String owner, String plate,String brand, String model, String year, String color) {
         this.owner = owner;
         this.plate = plate;
+        this.brand = brand;
         this.model = model;
         this.year = year;
         this.color = color;
@@ -70,5 +73,13 @@ public class Car {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

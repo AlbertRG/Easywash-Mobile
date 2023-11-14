@@ -18,7 +18,10 @@ public class MenuController extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 1: return new CarsFragment();
+            case 1:
+                // Aquí establece la etiqueta "CarsFragment" al agregar el fragmento
+                CarsFragment carsFragment = new CarsFragment();
+                return carsFragment;
             case 2: return new SettingFragment();
             default: return new HomeFragment();
         }

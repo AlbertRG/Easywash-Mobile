@@ -32,6 +32,13 @@ public class User {
         this.email = email;
         this.password = password;
     }
+    public User(String first_name, String last_name, String phone, String email) {
+        this.id = "0";
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.phone = phone;
+        this.email = email;
+    }
     public User() {
         this.id = "0";
         this.first_name = "first_name";

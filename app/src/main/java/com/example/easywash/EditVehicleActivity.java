@@ -3,6 +3,7 @@ package com.example.easywash;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -108,7 +109,7 @@ public class EditVehicleActivity extends AppCompatActivity {
                 // Crea un objeto "updatedCar" con los campos que deseas actualizar
                 String col = color.getText().toString();
                 Log.d("color",col);
-                Car updatedCar = new Car(getUserId(),plate.getText().toString(),model.getText().toString(),year.getText().toString(),col);
+                Car updatedCar = new Car(getUserId(),plate.getText().toString(),brand.getText().toString(),model.getText().toString(),year.getText().toString(),col);
                 Log.d("before update model",updatedCar.getModel());
                 Log.d("before update plate",updatedCar.getPlate());
                 Log.d("before update year",updatedCar.getYear());
@@ -172,12 +173,13 @@ public class EditVehicleActivity extends AppCompatActivity {
                                     // La solicitud DELETE se realizó con éxito y el automóvil se eliminó
                                     // Realiza cualquier acción necesaria después de la eliminación.
                                     Toast.makeText(getApplicationContext(),"Auto eliminado", Toast.LENGTH_SHORT).show();
-                                    CarParcelable carParcelable = new CarParcelable(getUserId(),plate.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
-                                    Intent resultIntent = new Intent();
-                                    resultIntent.putExtra("newCar", (Parcelable) carParcelable);
-                                    setResult(RESULT_OK, resultIntent);
-                                    finish();
+                                    Intent intent = new Intent();
+                                    intent.putExtra("adapterUpdated", true); // Puedes pasar cualquier valor o bandera que desees
+                                    setResult(RESULT_OK, intent);
 
+
+
+                                    finish();
                                 } else {
                                     // Maneja el caso en el que la solicitud DELETE no fue exitosa
                                     Toast.makeText(getApplicationContext(),"Error al eliminar", Toast.LENGTH_SHORT).show();
@@ -209,5 +211,7 @@ public class EditVehicleActivity extends AppCompatActivity {
         String idUser = sharedPreferences.getString("id", "0");
         return idUser;
     }
+
+
 
 }
