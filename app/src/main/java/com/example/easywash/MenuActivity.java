@@ -47,7 +47,6 @@ public class MenuActivity extends AppCompatActivity {
         String name;
         SharedPreferences metadata = getSharedPreferences("user.dat",MODE_PRIVATE);
         name = metadata.getString("name",null);
-        Toast.makeText(getApplicationContext(), "Bienvenido " + name, Toast.LENGTH_LONG).show();
 
         //Associate the menu with the Viewpager
         fragment.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(menu));

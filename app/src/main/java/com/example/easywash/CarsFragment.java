@@ -86,14 +86,6 @@ public class CarsFragment extends Fragment {
             }
         });
 
-        buttontestedit = vista.findViewById(R.id.carsitemMyAccount);
-        buttontestedit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                intent = new Intent(getActivity(), EditVehicleActivity.class);
-                startActivity(intent);
-            }
-        });
 
         return vista;
     }//OnCreateView

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.Toast;
  */
 public class SettingFragment extends Fragment {
     AppCompatButton myAccount;
+    AppCompatButton logout;
     private ActivityResultLauncher<Intent> myAccountActivity;
     private View vista;
     // TODO: Rename parameter arguments, choose names that match
@@ -79,6 +81,22 @@ public class SettingFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MyAccountActivity.class);
                 myAccountActivity.launch(intent);
+            }
+        });
+
+        logout = vista.findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                // Aquí puedes iniciar la actividad de inicio de sesión
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().finish();
+                Toast.makeText(getContext(),"¡Hasta luego!", Toast.LENGTH_SHORT).show();
+
             }
         });
         return vista;

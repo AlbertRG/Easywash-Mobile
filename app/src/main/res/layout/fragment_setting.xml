@@ -42,48 +42,6 @@
                 android:text="@string/MyAccount"
                 android:textAlignment="center" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/carsitem2"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/buttonwhite"
-                android:textAlignment="center"
-                android:text="Button" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/carsitem3"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/buttonwhite"
-                android:textAlignment="center"
-                android:text="Button" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/carsitem4"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/buttonwhite"
-                android:textAlignment="center"
-                android:text="Button" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/carsitem5"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/buttonwhite"
-                android:text="Button" />
-
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton

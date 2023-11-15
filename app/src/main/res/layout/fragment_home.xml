@@ -50,12 +50,25 @@
             android:id="@+id/linearLayout"
             android:layout_width="409dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="40dp"
-            android:visibility="visible"
+            android:layout_marginEnd="10dp"
             android:orientation="vertical"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imagelogohome">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/carsitem"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/buttonwhite"
+                android:text="Mis Visitas"
+                android:textAlignment="center" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerService"
@@ -71,10 +84,10 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="15dp"
-                android:visibility="invisible"
                 android:background="@drawable/buttonwhite"
+                android:text="Button"
                 android:textAlignment="center"
-                android:text="Button" />
+                android:visibility="invisible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/homeitem3"
@@ -83,10 +96,11 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="15dp"
-                android:visibility="invisible"
                 android:background="@drawable/buttonwhite"
+                android:text="Mis Visitas"
                 android:textAlignment="center"
-                android:text="Button" />
+                android:textColor="#000000"
+                android:visibility="invisible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/homeitem4"
@@ -95,10 +109,10 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="15dp"
-                android:visibility="invisible"
                 android:background="@drawable/buttonwhite"
+                android:text="Button"
                 android:textAlignment="center"
-                android:text="Button" />
+                android:visibility="invisible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/homeitem5"
@@ -106,9 +120,9 @@
                 android:layout_height="70dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:visibility="invisible"
                 android:background="@drawable/buttonwhite"
-                android:text="Button" />
+                android:text="Button"
+                android:visibility="invisible" />
 
         </LinearLayout>
 

@@ -24,6 +24,14 @@ import com.example.easywash.rest.CarParcelable;
 import com.example.easywash.rest.RetrofitClient;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,7 +83,7 @@ public class EditVehicleActivity extends AppCompatActivity {
                     Log.d("car id", car.getModel());
                     plate.setText(car.getPlate());
                     model.setText(car.getModel());
-                    //brand.setText(car.get);;
+                    brand.setText(car.getBrand());;
                     color.setText(car.getColor());
                     year.setText(car.getYear());
 
@@ -107,47 +115,60 @@ public class EditVehicleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Crea un objeto "updatedCar" con los campos que deseas actualizar
-                String col = color.getText().toString();
-                Log.d("color",col);
-                Car updatedCar = new Car(getUserId(),plate.getText().toString(),brand.getText().toString(),model.getText().toString(),year.getText().toString(),col);
-                Log.d("before update model",updatedCar.getModel());
-                Log.d("before update plate",updatedCar.getPlate());
-                Log.d("before update year",updatedCar.getYear());
-                Log.d("before update color",updatedCar.getColor());
-                // Crea una instancia de Retrofit y ApiInterface (esto varía según cómo lo configures en tu aplicación)
-                RetrofitClient retrofit = new RetrofitClient();
-                ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
+                if(plate.getText().toString().equals("")||model.getText().toString().equals("")||brand.getText().toString().equals("")||color.getText().toString().equals("")||year.getText().toString().equals(""))
+                    Toast.makeText(getApplicationContext(),"Llena todos los campos", Toast.LENGTH_SHORT).show();
+                else{
+                    if(!checkPlate(plate.getText().toString().trim())) {
+                        Toast.makeText(getApplicationContext(), "Placa no válida", Toast.LENGTH_SHORT).show();
+                    }else if(verifyYear(year.getText().toString().trim())){
+                        //Instancia de retrofit para invocar a la api
+                        RetrofitClient retrofit = new RetrofitClient();
+                        //Instancia de api
+                        ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
+                        //Instancia de carro
+                        Car car = new Car(getUserId(),plate.getText().toString().trim(),brand.getText().toString().trim(),model.getText().toString().trim(),year.getText().toString().trim(),color.getText().toString().trim());
+                        // Construye el cuerpo de la solicitud
+                        Call<Car> call = api.updateCar(id,car);
+                        //Llamada a APIREST
+                        call.enqueue(new Callback<Car>() {
+                            @Override
+                            public void onResponse(Call<Car> call, Response<Car> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "Auto actualizado", Toast.LENGTH_LONG).show();
+                                    Intent resultIntent = new Intent();
+                                    setResult(RESULT_OK, resultIntent);
+                                    finish();
+                                } else {
+                                    try {
+                                        //En caso de que la placa ya haya sido registrada
+                                        String errorBody = response.errorBody().string();
+                                        JSONObject errorResponse = new JSONObject(errorBody);
+                                        if (errorResponse.has("plate")) {
+                                            String phoneError = errorResponse.getJSONArray("plate").getString(0);
+                                            Toast.makeText(getApplicationContext(), "Placa ya registrada", Toast.LENGTH_LONG).show();
 
-                // Realiza la solicitud PATCH
-                Call<Car> call = api.updateCar(id, updatedCar);
-                Log.d("id edit",id);
-                call.enqueue(new Callback<Car>() {
-                    @Override
-                    public void onResponse(Call<Car> call, Response<Car> response) {
-                        if (response.isSuccessful()) {
-                            // El carro ha sido actualizado con éxito
-                            Car car = response.body();
-                            Log.d("update model",car.getModel());
-                            Log.d("update plate",car.getPlate());
-                            Log.d("update year",car.getYear());
-                            Log.d("update color",car.getColor());
-                            Toast.makeText(getApplicationContext(),"Auto editado", Toast.LENGTH_SHORT).show();
-                            finish();
 
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<Car> call, Throwable t) {
+                                Log.e("ERRORRR",t.getMessage());
 
+                            }
 
-                        } else {
-                            // Maneja el caso en el que la solicitud PATCH no fue exitosa
-                            Toast.makeText(getApplicationContext(),"Auto editado", Toast.LENGTH_SHORT).show();
+                        });
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Año no válido", Toast.LENGTH_LONG).show();
 
-                        }
                     }
 
-                    @Override
-                    public void onFailure(Call<Car> call, Throwable t) {
-                        // Maneja errores de red o de la API
-                    }
-                });
+                }
 
 
             }//editonClick
@@ -211,6 +232,32 @@ public class EditVehicleActivity extends AppCompatActivity {
         String idUser = sharedPreferences.getString("id", "0");
         return idUser;
     }
+    private boolean checkPlate(String plate){
+        // Expresión regular que busca tres letras seguidas de tres o cuatro números
+        String regex = "^[A-Za-z]{3}[0-9]{3,4}$";
+
+        // Compilar la expresión regular
+        Pattern pattern = Pattern.compile(regex);
+
+        // Crear un objeto Matcher
+        Matcher matcher = pattern.matcher(plate);
+
+        // Verificar si el texto coincide con la expresión regular
+        return matcher.matches();
+    }
+    private boolean verifyYear(String year){
+        Calendar calendar = Calendar.getInstance();
+        int añoActual = calendar.get(Calendar.YEAR);
+        int añoIngresado = Integer.parseInt(year);
+
+        if (añoIngresado <= añoActual) {
+            // El año ingresado es inferior o igual al año actual
+            return true;
+        } else {
+            // El año ingresado es superior al año actual
+           return false;
+        }
+    }//Verifyyear
 
 
 

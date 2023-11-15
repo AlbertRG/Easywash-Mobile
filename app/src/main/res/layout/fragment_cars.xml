@@ -21,67 +21,37 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imagefacecars"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/carssignup"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/face_confused"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imagelogocars" />
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/buttonwhite"
+            android:onClick="goRegisterVehicleActivity"
+            android:text="@string/signupcar"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@+id/imagelogocars"
+            tools:layout_editor_absoluteX="10dp" />
 
-        <TextView
-            android:id="@+id/txtcars"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/Nocars"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imagefacecars" />
+            app:layout_constraintTop_toBottomOf="@+id/carssignup">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imagefacecars">
-
-            <LinearLayout
-                android:id="@+id/linearLayout"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerCar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="vertical"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imagelogocars">
+                android:layout_height="match_parent" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/carssignup"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:background="@drawable/buttonwhite"
-                    android:onClick="goRegisterVehicleActivity"
-                    android:text="@string/signupcar"
-                    android:textAlignment="center" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerCar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
-        </ScrollView>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

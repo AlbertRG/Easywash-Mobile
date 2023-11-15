@@ -190,6 +190,12 @@ public class ServiceActivity extends AppCompatActivity {
     }//setName
 
     private void setCar(String id){
+        if(id == null){
+            plateTicket.setText("Auto eliminado");
+            customDialog.dismiss();
+            return;
+
+        }
         //API
         //Conexion a la API
         RetrofitClient retrofit = new RetrofitClient();

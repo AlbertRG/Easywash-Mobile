@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,15 +65,15 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                 if(plate.getText().toString().equals("")||model.getText().toString().equals("")||brand.getText().toString().equals("")||color.getText().toString().equals("")||year.getText().toString().equals(""))
                     Toast.makeText(getApplicationContext(),"Llena todos los campos", Toast.LENGTH_SHORT).show();
                 else{
-                    if(!checkPlate(plate.getText().toString()))
-                        Toast.makeText(getApplicationContext(),"Placa no válida", Toast.LENGTH_SHORT).show();
-                    else{
+                    if(!checkPlate(plate.getText().toString().trim())) {
+                        Toast.makeText(getApplicationContext(), "Placa no válida", Toast.LENGTH_SHORT).show();
+                    }else if(verifyYear(year.getText().toString().trim())){
                         //Instancia de retrofit para invocar a la api
                         RetrofitClient retrofit = new RetrofitClient();
                         //Instancia de api
                         ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
                         //Instancia de carro
-                        Car car = new Car(getUserId(),plate.getText().toString(),brand.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
+                        Car car = new Car(getUserId(),plate.getText().toString().trim(),brand.getText().toString().trim(),model.getText().toString().trim(),year.getText().toString().trim(),color.getText().toString().trim());
                         CarParcelable carParcelable = new CarParcelable(getUserId(),plate.getText().toString(),model.getText().toString(),year.getText().toString(),color.getText().toString());
                         // Construye el cuerpo de la solicitud
                         Call<Car> call = api.sendCar(car);
@@ -110,10 +111,13 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                             }
 
                         });
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Año no válido", Toast.LENGTH_LONG).show();
+
                     }
 
                 }
-            }
+            }//onClick
         });
 
     }//onCreate
@@ -138,5 +142,18 @@ public class RegisterVehicleActivity extends AppCompatActivity {
         String idUser = sharedPreferences.getString("id", "0");
         return idUser;
     }
+    private boolean verifyYear(String year){
+        Calendar calendar = Calendar.getInstance();
+        int añoActual = calendar.get(Calendar.YEAR);
+        int añoIngresado = Integer.parseInt(year);
+
+        if (añoIngresado <= añoActual) {
+            // El año ingresado es inferior o igual al año actual
+            return true;
+        } else {
+            // El año ingresado es superior al año actual
+            return false;
+        }
+    }//Verifyyear
 
 }
