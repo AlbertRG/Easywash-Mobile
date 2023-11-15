@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,31 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.setEmailText);
         password = findViewById(R.id.setPasswordText);
         databaseHelper = new DatabaseHelper(this);
-        TextView forgot = findViewById(R.id.txtForgotPass);
-        forgot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Connection connection = null;
-                try {
-                    // Configura la URL de conexión a tu base de datos PostgreSQL
-                    String url = "jdbc:postgresql://54.152.214.237:5432/myproject";
-                    String user = "myprojectuser";
-                    String password = "password";
+        //TextView forgot = findViewById(R.id.txtForgotPass);
 
-                    // Carga el controlador JDBC de PostgreSQL
-                    Class.forName("org.postgresql.Driver");
-
-                    // Conecta a la base de datos
-                    connection = DriverManager.getConnection(url, user, password);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                Log.d("Soy gabo","hola");
-            }
-
-        });
 
         ImageView back = findViewById(R.id.imgBack);
         back.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Llena todos los campos", Toast.LENGTH_SHORT).show();
             Log.d("NO ENTROOOOOOO","nO ENTRO");
         }
-        else {
+        else if(isNetworkAvailable()) {
             //Conexion a la API
             RetrofitClient retrofit = new RetrofitClient();
             ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
@@ -177,6 +156,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             });
+        }else{
+            Toast.makeText(getApplicationContext(), "Conéctate a internet", Toast.LENGTH_LONG).show();
+
         }
     }//Login
 
@@ -212,5 +194,14 @@ public class LoginActivity extends AppCompatActivity {
         edit.putBoolean("register", true);
         edit.apply();
     }//savePreferences
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+        return false;
+    }//isNetworkAvailable
 
 }

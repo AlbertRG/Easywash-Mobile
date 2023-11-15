@@ -3,7 +3,10 @@ package com.example.easywash;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -60,17 +63,22 @@ public class RegisterActivity extends AppCompatActivity {
         correo = email.getText().toString().trim();
         contrasena = password.getText().toString().trim();
         confContra = repeatPassword.getText().toString().trim();
-        if(!nombre.equals("")&&!apellido.equals("")&&!correo.equals("")&&!contrasena.equals("")&&!confContra.equals("")){
-            if(!termsOfService.isChecked()) {
-                Toast.makeText(getApplicationContext(), "Es necesario aceptar los terminos de uso del servicio", Toast.LENGTH_LONG).show();
+        if(isNetworkAvailable()) {
+            if (!nombre.equals("") && !apellido.equals("") && !correo.equals("") && !contrasena.equals("") && !confContra.equals("")) {
+                if (!termsOfService.isChecked()) {
+                    Toast.makeText(getApplicationContext(), "Es necesario aceptar los terminos de uso del servicio", Toast.LENGTH_LONG).show();
 
-            }else if(createAccount()){
-                intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
+                } else if (createAccount()) {
+                    intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Llena todos los campos", Toast.LENGTH_LONG).show();
+
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "Llena todos los campos", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "Conéctate a internet", Toast.LENGTH_LONG).show();
 
         }
     }//signUp
@@ -183,4 +191,12 @@ public class RegisterActivity extends AppCompatActivity {
         // Verificar si el número coincide con el patrón
         return matcher.matches();
     }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+        return false;
+    }//isNetworkAvailable
 }

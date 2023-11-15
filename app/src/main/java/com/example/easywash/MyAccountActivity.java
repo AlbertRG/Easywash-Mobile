@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -116,19 +118,24 @@ public class MyAccountActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MyAccountActivity.this);
-                builder.setMessage("¿Desea eliminar su cuenta?").setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        showPasswordDialog();
-                    }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                if (isNetworkAvailable()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MyAccountActivity.this);
+                    builder.setMessage("¿Desea eliminar su cuenta?").setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            showPasswordDialog();
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                }).show();
-            }
+                        }
+                    }).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Conéctate a internet", Toast.LENGTH_LONG).show();
+
+                }
+            }//onClick
         });
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -275,67 +282,71 @@ public class MyAccountActivity extends AppCompatActivity {
                 // Si es correcta, realiza el cambio; de lo contrario, muestra un mensaje de error
                 Log.d("pass",enteredPassword);
                 Log.d("savepass",getPass());
+                if(isNetworkAvailable()) {
 
-                if(checkPassword(enteredPassword)){
-                    // Crea una instancia de Retrofit y ApiInterface (esto varía según cómo lo configures en tu aplicación)
-                    RetrofitClient retrofit = new RetrofitClient();
-                    ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
+                    if (checkPassword(enteredPassword)) {
+                        // Crea una instancia de Retrofit y ApiInterface (esto varía según cómo lo configures en tu aplicación)
+                        RetrofitClient retrofit = new RetrofitClient();
+                        ApiInterface api = retrofit.getRetrofitInstance().create(ApiInterface.class);
 
-                    // Realiza la solicitud PATCH
-                    Call<User> call = api.updateUser(idUser, updatedUser);
-                    call.enqueue(new Callback<User>() {
-                        @Override
-                        public void onResponse(Call<User> call, Response<User> response) {
-                            if (response.isSuccessful()) {
-                                // El carro ha sido actualizado con éxito
-                                User user = response.body();
-                                Log.d("update name",user.getfirst_name());
-                                Log.d("update lastname",user.getLast_name());
-                                Log.d("update phone",user.getPhone());
-                                Log.d("update email",user.getEmail());
-                                Log.d("pass",user.getPassword());
-                                Toast.makeText(getApplicationContext(),"Cuenta actualizada", Toast.LENGTH_SHORT).show();
-                                finish();
-
-
-
-                            } else {
-                                // Maneja el caso en el que la solicitud PATCH no fue exitosa
-                                try {
-                                    String errorBody = response.errorBody().string();
-                                    JSONObject errorResponse = new JSONObject(errorBody);
-                                    if (errorResponse.has("phone")) {
-                                        String phoneError = errorResponse.getJSONArray("phone").getString(0);
-                                        Toast.makeText(getApplicationContext(), "Teléfono ya registrado", Toast.LENGTH_LONG).show();
+                        // Realiza la solicitud PATCH
+                        Call<User> call = api.updateUser(idUser, updatedUser);
+                        call.enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                if (response.isSuccessful()) {
+                                    // El carro ha sido actualizado con éxito
+                                    User user = response.body();
+                                    Log.d("update name", user.getfirst_name());
+                                    Log.d("update lastname", user.getLast_name());
+                                    Log.d("update phone", user.getPhone());
+                                    Log.d("update email", user.getEmail());
+                                    Log.d("pass", user.getPassword());
+                                    Toast.makeText(getApplicationContext(), "Cuenta actualizada", Toast.LENGTH_SHORT).show();
+                                    finish();
 
 
+                                } else {
+                                    // Maneja el caso en el que la solicitud PATCH no fue exitosa
+                                    try {
+                                        String errorBody = response.errorBody().string();
+                                        JSONObject errorResponse = new JSONObject(errorBody);
+                                        if (errorResponse.has("phone")) {
+                                            String phoneError = errorResponse.getJSONArray("phone").getString(0);
+                                            Toast.makeText(getApplicationContext(), "Teléfono ya registrado", Toast.LENGTH_LONG).show();
+
+
+                                        }
+                                        if (errorResponse.has("email")) {
+                                            String emailError = errorResponse.getJSONArray("email").getString(0);
+                                            Toast.makeText(getApplicationContext(), "Email ya registrado", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                    if (errorResponse.has("email")) {
-                                        String emailError = errorResponse.getJSONArray("email").getString(0);
-                                        Toast.makeText(getApplicationContext(), "Email ya registrado", Toast.LENGTH_LONG).show();
 
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
-
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<User> call, Throwable t) {
-                            // Maneja errores de red o de la API
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+                                // Maneja errores de red o de la API
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+
+                    }
                 }else{
-                    Toast.makeText(getApplicationContext(),"Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Conéctate a internet", Toast.LENGTH_LONG).show();
 
                 }
 
 
-            }
+            }//onClick
         });
 
         passwordDialogBuilder.setNegativeButton("Cancelar", null);
@@ -377,5 +388,12 @@ public class MyAccountActivity extends AppCompatActivity {
             return true;
         return false;
     }//checkPassword
-
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+        return false;
+    }//isNetworkAvailable
 }
