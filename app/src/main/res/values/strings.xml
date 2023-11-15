@@ -19,7 +19,7 @@
     <string name="PhoneHelper">Telefono a 10 dígitos</string>
     <string name="PasswordHelper">Mínimo 8 caracteres, una minúscula, una mayúscula y un número</string>
     <string name="PasswordRepeat">Repetir Contraseña</string>
-    <string name="Services">Estoy de acuerdo con los <a href="https://www.google.com">términos y condiciones</a></string>
+    <string name="Services">Estoy de acuerdo con los <a href="https://h2oautolavado.com/terms">términos y condiciones</a></string>
 
     /*Recovery*/
     <string name="Recovery">Recuperar Contraseña</string>
