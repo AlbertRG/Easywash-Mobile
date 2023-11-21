@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.easywash"
+    namespace = "com.h2o.easywash"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.easywash"
+        applicationId = "com.h2o.easywash"
         minSdk = 28
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
